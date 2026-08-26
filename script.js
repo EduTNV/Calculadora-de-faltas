@@ -14,56 +14,56 @@ const subjectAcronyms = {
 
 const weeklySchedule = {
     1: [
-        { time: '08h20-09h10', code: 'sai' },
-        { time: '09h10-10h00', code: 'sai' },
-        { time: '10h00-10h50', code: 'saude_mulher' },
-        { time: '10h50-11h40', code: 'saude_mulher' },
-        { time: '13h30-14h20', code: 'med_com' },
-        { time: '14h20-15h10', code: 'med_com' },
-        { time: '15h10-16h00', code: 'med_com' },
-        { time: '16h00-16h50', code: 'med_com' }
+        { time: '08h30-09h30', code: 'sai' },
+        { time: '09h30-10h30', code: 'sai' },
+        { time: '10h30-11h30', code: 'saude_mulher' },
+        { time: '11h30-12h30', code: 'saude_mulher' },
+        { time: '13h30-14h30', code: 'med_com' },
+        { time: '14h30-15h30', code: 'med_com' },
+        { time: '15h30-16h30', code: 'med_com' },
+        { time: '16h30-17h30', code: 'med_com' }
     ],
     2: [
-        { time: '07h30-08h20', code: 'sai' },
-        { time: '08h20-09h10', code: 'sai' },
-        { time: '09h10-10h00', code: 'sai' },
-        { time: '10h00-10h50', code: 'sai' },
-        { time: '10h50-11h40', code: 'sai' },
-        { time: '11h40-12h30', code: 'sai' },
-        { time: '13h30-14h20', code: 'sai' },
-        { time: '14h20-15h10', code: 'sai' },
-        { time: '15h10-16h00', code: 'sai' },
-        { time: '16h00-16h50', code: 'sai' },
-        { time: '16h50-17h40', code: 'sai' }
+        { time: '07h30-08h30', code: 'sai' },
+        { time: '08h30-09h30', code: 'sai' },
+        { time: '09h30-10h30', code: 'sai' },
+        { time: '10h30-11h30', code: 'sai' },
+        { time: '11h30-12h30', code: 'sai' },
+        { time: '12h30-13h30', code: 'sai' },
+        { time: '13h30-14h30', code: 'sai' },
+        { time: '14h30-15h30', code: 'sai' },
+        { time: '15h30-16h30', code: 'sai' },
+        { time: '16h30-17h30', code: 'sai' },
+        { time: '17h30-18h30', code: 'sai' }
     ],
     3: [
-        { time: '07h30-08h20', code: 'pesq_saude' },
-        { time: '08h20-09h10', code: 'pesq_saude' },
-        { time: '09h10-10h00', code: 'pesq_saude' },
-        { time: '10h00-10h50', code: 'sai' },
-        { time: '10h50-11h40', code: 'sai' }
+        { time: '07h30-08h30', code: 'pesq_saude' },
+        { time: '08h30-09h30', code: 'pesq_saude' },
+        { time: '09h30-10h30', code: 'pesq_saude' },
+        { time: '10h30-11h30', code: 'sai' },
+        { time: '11h30-12h30', code: 'sai' }
     ],
     4: [
-        { time: '07h30-08h20', code: 'saude_crianca' },
-        { time: '08h20-09h10', code: 'saude_crianca' },
-        { time: '10h00-10h50', code: 'saude_mulher' },
-        { time: '10h50-11h40', code: 'saude_mulher' },
-        { time: '13h30-14h20', code: 'proj_ext' },
-        { time: '14h20-15h10', code: 'proj_ext' },
-        { time: '15h10-16h00', code: 'proj_ext' },
-        { time: '16h00-16h50', code: 'med_legal' },
-        { time: '16h50-17h40', code: 'med_legal' },
-        { time: '17h40-18h30', code: 'med_legal' }
+        { time: '07h30-08h30', code: 'saude_crianca' },
+        { time: '08h30-09h30', code: 'saude_crianca' },
+        { time: '10h30-11h30', code: 'saude_mulher' },
+        { time: '11h30-12h30', code: 'saude_mulher' },
+        { time: '13h30-14h30', code: 'proj_ext' },
+        { time: '14h30-15h30', code: 'proj_ext' },
+        { time: '15h30-16h30', code: 'proj_ext' },
+        { time: '16h30-17h30', code: 'med_legal' },
+        { time: '17h30-18h30', code: 'med_legal' },
+        { time: '18h30-19h30', code: 'med_legal' }
     ],
     5: [
-        { time: '13h30-14h20', code: 'saude_crianca' },
-        { time: '14h20-15h10', code: 'saude_crianca' },
-        { time: '16h00-16h50', code: 'sai' },
-        { time: '16h50-17h40', code: 'sai' }
+        { time: '13h30-14h30', code: 'saude_crianca' },
+        { time: '14h30-15h30', code: 'saude_crianca' },
+        { time: '16h30-17h30', code: 'sai' },
+        { time: '17h30-18h30', code: 'sai' }
     ]
 };
 
-const calcLimit = (hours) => Math.floor((hours * 60) / 50);
+const calcLimit = (hours) => Math.floor(hours);
 
 const subjectsData = {
     'med_com': { name: 'Medicina e Comunidade', limit: calcLimit(20) },

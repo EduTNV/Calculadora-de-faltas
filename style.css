@@ -1,39 +1,82 @@
 /* =========================================
-   ESTILOS (CSS) - Design iOS e Compacto
+   ESTILOS (CSS) - Dark Premium Design
+   6º Semestre
    ========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 :root {
-    --bg-color: #f2f2f7;
-    --card-bg: #ffffff;
-    --text-main: #000000;
-    --text-muted: #8e8e93;
-    --accent-blue: #007aff;
-    --danger-red: #ff3b30;
-    --warning-orange: #ff9500;
-    --safe-green: #34c759;
-    --border-color: #e5e5ea;
-    --date-picker-bg: rgba(0,0,0,0.5);
-    --date-picker-accent: #008080;
+    --bg-color: #0f0f14;
+    --bg-secondary: #1a1a24;
+    --card-bg: rgba(30, 30, 42, 0.85);
+    --card-bg-solid: #1e1e2a;
+    --card-border: rgba(255, 255, 255, 0.06);
+    --text-main: #f0f0f5;
+    --text-muted: #8b8b9e;
+    --text-dim: #5a5a6e;
+
+    --accent-primary: #6c5ce7;
+    --accent-secondary: #a29bfe;
+    --accent-gradient: linear-gradient(135deg, #6c5ce7, #a29bfe);
+
+    --danger-red: #ff6b6b;
+    --danger-bg: rgba(255, 107, 107, 0.12);
+    --warning-orange: #ffa94d;
+    --warning-bg: rgba(255, 169, 77, 0.12);
+    --safe-green: #51cf66;
+    --safe-bg: rgba(81, 207, 102, 0.12);
+
+    --border-color: rgba(255, 255, 255, 0.06);
+    --glass-bg: rgba(30, 30, 42, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-blur: blur(20px);
+
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+
+    /* Subject colors */
+    --color-go: #ff6b6b;
+    --color-sai: #6c5ce7;
+    --color-ped: #ffa94d;
+    --color-pesquisa: #51cf66;
+    --color-projeto: #4ecdc4;
+    --color-med_com: #ff9ff3;
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-tap-highlight-color: transparent;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
-    padding-bottom: 70px; 
+    padding-bottom: 85px;
     overflow-x: hidden;
+    min-height: 100vh;
+    background-image:
+        radial-gradient(ellipse at 20% 0%, rgba(108, 92, 231, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 100%, rgba(162, 155, 254, 0.06) 0%, transparent 60%);
 }
 
+/* =========================================
+   HEADER
+   ========================================= */
 header {
-    background-color: var(--card-bg);
-    padding: 12px 16px; 
-    border-bottom: 1px solid var(--border-color);
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--glass-border);
     position: sticky;
     top: 0;
     z-index: 10;
@@ -49,57 +92,105 @@ header {
 .month-year-display {
     display: flex;
     align-items: center;
+    gap: 4px;
 }
 
 .month-year-display button {
-    background: none;
-    border: none;
-    color: var(--accent-blue);
-    font-size: 20px;
+    background: rgba(108, 92, 231, 0.12);
+    border: 1px solid rgba(108, 92, 231, 0.2);
+    color: var(--accent-secondary);
+    font-size: 16px;
     cursor: pointer;
-    padding: 0 10px;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.month-year-display button:hover {
+    background: rgba(108, 92, 231, 0.2);
+    transform: scale(1.05);
+}
+.month-year-display button:active {
+    transform: scale(0.95);
 }
 .month-year-display button:disabled {
-    color: #c7c7cc;
+    color: var(--text-dim);
+    background: rgba(255, 255, 255, 0.03);
+    border-color: transparent;
     cursor: not-allowed;
+    transform: none;
 }
 
 .week-info {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0 5px;
+    margin: 0 8px;
     cursor: pointer;
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    transition: background 0.2s;
+}
+.week-info:hover {
+    background: rgba(255, 255, 255, 0.05);
 }
 
 #month-year-text {
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 #week-range-text {
     font-size: 11px;
     color: var(--text-muted);
+    font-weight: 500;
+    margin-top: 1px;
 }
 
 #btn-today {
-    background: none;
+    background: var(--accent-gradient);
     border: none;
-    color: var(--accent-blue);
-    font-size: 13px;
+    color: white;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
-    padding: 0;
+    padding: 7px 14px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+#btn-today:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+}
+#btn-today:active {
+    transform: scale(0.95);
 }
 
 .header-title {
     text-align: center;
     width: 100%;
-    font-size: 16px;
-    font-weight: 600;
-    padding: 5px 0;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 6px 0;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.5px;
 }
 
+/* =========================================
+   DATE PICKER
+   ========================================= */
 #date-picker-overlay {
     display: none;
     position: fixed;
@@ -107,263 +198,569 @@ header {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--date-picker-bg);
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
     z-index: 30;
     justify-content: center;
     align-items: center;
+    animation: fadeOverlay 0.2s ease;
 }
+
+@keyframes fadeOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 #date-picker {
-    background-color: var(--card-bg);
-    padding: 20px;
-    border-radius: 12px;
+    background: var(--card-bg-solid);
+    border: 1px solid var(--glass-border);
+    padding: 24px;
+    border-radius: var(--radius-lg);
     width: 90%;
     max-width: 400px;
     text-align: center;
+    box-shadow: var(--shadow-lg);
+    animation: scaleIn 0.25s ease;
+}
+
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 .picker-month-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
 }
 .picker-month-nav button {
-    background: none;
-    border: none;
-    color: var(--accent-blue);
-    font-size: 22px;
+    background: rgba(108, 92, 231, 0.12);
+    border: 1px solid rgba(108, 92, 231, 0.2);
+    color: var(--accent-secondary);
+    font-size: 18px;
     font-weight: bold;
     cursor: pointer;
-    padding: 0 10px;
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+}
+.picker-month-nav button:hover {
+    background: rgba(108, 92, 231, 0.2);
 }
 .picker-month-nav h3 {
     font-size: 17px;
+    font-weight: 700;
+    color: var(--text-main);
     margin: 0;
 }
 
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    margin-top: 15px;
+    gap: 4px;
+    margin-top: 12px;
 }
 .calendar-grid div {
     padding: 10px 0;
     cursor: pointer;
     border-radius: 50%;
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-main);
+    transition: all 0.15s;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.calendar-grid div:hover:not(.day-header):not(.disabled-day) {
+    background: rgba(108, 92, 231, 0.15);
 }
 .calendar-grid .day-header {
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text-muted);
     cursor: default;
+    font-size: 11px;
+    text-transform: uppercase;
 }
 .calendar-grid .today {
-    background-color: var(--date-picker-accent);
+    background: var(--accent-gradient);
     color: white;
+    font-weight: 700;
 }
 .calendar-grid .missed-class {
-    border: 2px solid #800080;
+    border: 2px solid var(--danger-red);
+    box-shadow: 0 0 8px rgba(255, 107, 107, 0.3);
 }
 .calendar-grid .disabled-day {
-    color: #c7c7cc;
+    color: var(--text-dim);
     cursor: not-allowed;
     background: transparent;
     border: none;
+    opacity: 0.3;
 }
 #close-date-picker {
-    margin-top: 15px;
-    background: none;
-    border: none;
-    color: var(--accent-blue);
+    margin-top: 18px;
+    background: rgba(108, 92, 231, 0.12);
+    border: 1px solid rgba(108, 92, 231, 0.2);
+    color: var(--accent-secondary);
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px 24px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+}
+#close-date-picker:hover {
+    background: rgba(108, 92, 231, 0.2);
 }
 
+/* =========================================
+   DATE CAROUSEL
+   ========================================= */
 .date-carousel {
     display: flex;
-    background-color: var(--card-bg);
-    padding: 8px 10px;
-    border-radius: 12px;
-    margin-bottom: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--card-border);
+    padding: 8px;
+    border-radius: var(--radius-md);
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
     justify-content: space-between;
+    gap: 6px;
 }
 .date-carousel-item {
     flex: 1;
     text-align: center;
     cursor: pointer;
-    padding: 8px 0;
-    border-radius: 8px;
+    padding: 10px 0;
+    border-radius: var(--radius-sm);
+    transition: all 0.25s ease;
+    position: relative;
+}
+.date-carousel-item:hover {
+    background: rgba(255, 255, 255, 0.05);
 }
 .date-carousel-item.active {
-    background-color: var(--date-picker-accent);
+    background: var(--accent-gradient);
     color: white;
+    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.35);
+    transform: scale(1.02);
 }
 .date-carousel-item h4 {
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 10px;
+    font-weight: 700;
     text-transform: uppercase;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+}
+.date-carousel-item.active h4 {
+    color: rgba(255, 255, 255, 0.8);
 }
 .date-carousel-item span {
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 800;
 }
 
+/* =========================================
+   TABS
+   ========================================= */
 .tab-content {
     display: none;
-    padding: 10px 16px;
-    animation: fadeIn 0.2s ease;
+    padding: 12px 16px;
+    animation: fadeSlide 0.3s ease;
 }
 .tab-content.active {
     display: block;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* =========================================
+   CLASS CARDS
+   ========================================= */
 #calendar-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 10px; 
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
 }
 
 .class-card {
-    background-color: var(--card-bg);
-    padding: 12px 10px;
-    border-radius: 10px;
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--card-border);
+    padding: 14px 12px;
+    border-radius: var(--radius-md);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    box-shadow: var(--shadow-sm);
     cursor: pointer;
-    transition: background-color 0.2s;
-    position: relative; 
-    min-height: 75px;
+    transition: all 0.25s ease;
+    position: relative;
+    min-height: 85px;
+    overflow: hidden;
+}
+
+.class-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    opacity: 0.8;
+}
+
+/* Subject color accents */
+.class-card[data-subject="go"]::before { background: var(--color-go); }
+.class-card[data-subject="sai"]::before { background: var(--color-sai); }
+.class-card[data-subject="ped"]::before { background: var(--color-ped); }
+.class-card[data-subject="pesquisa"]::before { background: var(--color-pesquisa); }
+.class-card[data-subject="projeto"]::before { background: var(--color-projeto); }
+.class-card[data-subject="med_com"]::before { background: var(--color-med_com); }
+
+.class-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 .class-card:active {
-    background-color: var(--border-color);
+    transform: scale(0.97);
 }
+
 .class-card p {
     font-size: 11px;
     color: var(--text-muted);
     margin-bottom: 4px;
+    font-weight: 500;
 }
 .class-card h4 {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.3;
+    letter-spacing: 0.3px;
 }
 
 .absence-mark {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    border: 2px solid #c7c7cc;
+    border: 2px solid var(--text-dim);
     position: absolute;
-    top: 6px;
-    right: 6px;
+    top: 10px;
+    right: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-weight: bold;
     font-size: 10px;
+    transition: all 0.3s ease;
+}
+.class-card.missed {
+    border-color: rgba(255, 107, 107, 0.3);
+    background: rgba(255, 107, 107, 0.06);
 }
 .class-card.missed .absence-mark {
     background-color: var(--danger-red);
     border-color: var(--danger-red);
+    box-shadow: 0 0 12px rgba(255, 107, 107, 0.4);
+    animation: popIn 0.3s ease;
 }
 .class-card.missed .absence-mark::after {
-    content: "X";
+    content: "✕";
+    font-size: 11px;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.5); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
 }
 
 .no-class-card {
-    grid-column: span 2; 
-    padding: 20px;
+    grid-column: span 2;
+    padding: 40px 20px;
     text-align: center;
-    background-color: transparent;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
     color: var(--text-muted);
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 500;
 }
 
+/* =========================================
+   SUMMARY
+   ========================================= */
 .summary-header {
     text-align: center;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 .summary-header p {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-muted);
     text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
 }
 
 .summary-card {
-    background-color: var(--card-bg);
-    border-radius: 10px;
-    padding: 14px;
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 16px 18px;
     margin-bottom: 12px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
 }
+.summary-card:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.summary-card[data-subject="go"]::before { background: var(--color-go); }
+.summary-card[data-subject="sai"]::before { background: var(--color-sai); }
+.summary-card[data-subject="ped"]::before { background: var(--color-ped); }
+.summary-card[data-subject="pesquisa"]::before { background: var(--color-pesquisa); }
+.summary-card[data-subject="projeto"]::before { background: var(--color-projeto); }
+.summary-card[data-subject="med_com"]::before { background: var(--color-med_com); }
+
 .summary-title {
     font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--bg-color);
+    font-weight: 700;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 .summary-stats {
     display: flex;
     justify-content: space-between;
     font-size: 13px;
+    margin-bottom: 12px;
 }
-.status-badge {
-    padding: 3px 6px;
-    border-radius: 6px;
-    font-weight: 600;
-    color: white;
-    font-size: 12px;
-}
-.status-safe { background-color: var(--safe-green); }
-.status-warning { background-color: var(--warning-orange); }
-.status-danger { background-color: var(--danger-red); }
 
+.summary-stats .stat-label {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.summary-stats .stat-value {
+    font-weight: 600;
+}
+
+.summary-stats .stat-danger {
+    color: var(--danger-red);
+}
+
+/* Progress bar */
+.progress-container {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+.progress-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.progress-safe { background: var(--safe-green); box-shadow: 0 0 8px rgba(81, 207, 102, 0.3); }
+.progress-warning { background: var(--warning-orange); box-shadow: 0 0 8px rgba(255, 169, 77, 0.3); }
+.progress-danger { background: var(--danger-red); box-shadow: 0 0 8px rgba(255, 107, 107, 0.3); }
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    color: white;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+.status-safe { background: rgba(81, 207, 102, 0.15); color: var(--safe-green); }
+.status-warning { background: rgba(255, 169, 77, 0.15); color: var(--warning-orange); }
+.status-danger { background: rgba(255, 107, 107, 0.15); color: var(--danger-red); }
+
+/* Dates list in summary */
+.absence-dates-toggle {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--accent-secondary);
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s;
+    user-select: none;
+}
+.absence-dates-toggle:hover {
+    color: var(--accent-primary);
+}
+.absence-dates-toggle .arrow {
+    transition: transform 0.2s;
+    font-size: 10px;
+}
+.absence-dates-toggle.open .arrow {
+    transform: rotate(90deg);
+}
+
+.absence-dates-list {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    display: none;
+    max-height: 150px;
+    overflow-y: auto;
+}
+.absence-dates-list.show {
+    display: block;
+    animation: fadeSlide 0.2s ease;
+}
+.absence-dates-list .date-item {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    display: flex;
+    justify-content: space-between;
+}
+.absence-dates-list .date-item:last-child {
+    border-bottom: none;
+}
+.absence-dates-list .date-item .date-time {
+    color: var(--text-dim);
+    font-size: 11px;
+}
+
+/* =========================================
+   BOTTOM NAV
+   ========================================= */
 .bottom-nav {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: rgba(249, 249, 249, 0.94);
-    backdrop-filter: blur(10px);
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     display: flex;
     justify-content: space-around;
-    padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
-    border-top: 1px solid #c7c7cc;
+    padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--glass-border);
     z-index: 20;
 }
 .nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: var(--text-muted);
+    color: var(--text-dim);
     font-size: 10px;
-    font-weight: 500;
+    font-weight: 600;
     text-decoration: none;
     cursor: pointer;
+    transition: all 0.2s;
+    padding: 4px 16px;
+    border-radius: var(--radius-sm);
+}
+.nav-item:hover {
+    color: var(--text-muted);
 }
 .nav-item.active {
-    color: var(--accent-blue);
+    color: var(--accent-secondary);
 }
 .nav-icon {
-    font-size: 20px;
-    margin-bottom: 2px;
+    font-size: 22px;
+    margin-bottom: 3px;
+}
+
+/* =========================================
+   SCROLLBAR CUSTOM
+   ========================================= */
+::-webkit-scrollbar {
+    width: 4px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (min-width: 600px) {
+    body {
+        max-width: 480px;
+        margin: 0 auto;
+        border-left: 1px solid var(--border-color);
+        border-right: 1px solid var(--border-color);
+    }
+    .bottom-nav {
+        max-width: 480px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 360px) {
+    header {
+        padding: 10px 12px;
+    }
+    .tab-content {
+        padding: 10px 12px;
+    }
+    #calendar-container {
+        gap: 8px;
+    }
+    .class-card {
+        min-height: 75px;
+        padding: 12px 8px;
+    }
+    .class-card h4 {
+        font-size: 12px;
+    }
+    .date-carousel-item span {
+        font-size: 16px;
+    }
+    .date-carousel-item h4 {
+        font-size: 9px;
+    }
 }

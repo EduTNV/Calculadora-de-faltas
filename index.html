@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Controle de Faltas - Medicina 2026</title>
+    <meta name="description" content="Calculadora de faltas do 6º Semestre - Controle suas presenças e veja quantas faltas ainda pode dar em cada matéria.">
+    <meta name="theme-color" content="#0f0f14">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Controle de Faltas - 6º Semestre</title>
     
     <link rel="stylesheet" href="style.css">
     
@@ -14,16 +17,16 @@
     <header>
         <div class="header-nav" id="header-calendar-nav">
             <div class="month-year-display">
-                <button onclick="prevWeek()" id="btn-prev-week">&lt;</button>
+                <button onclick="prevWeek()" id="btn-prev-week" aria-label="Semana anterior">&lt;</button>
                 <div class="week-info" onclick="toggleDatePicker()">
-                    <span id="month-year-text">MARÇO 2026</span>
-                    <span id="week-range-text">semana 23-28</span>
+                    <span id="month-year-text">AGO 2026</span>
+                    <span id="week-range-text">semana 24-28</span>
                 </div>
-                <button onclick="nextWeek()" id="btn-next-week">&gt;</button>
+                <button onclick="nextWeek()" id="btn-next-week" aria-label="Próxima semana">&gt;</button>
             </div>
-            <button id="btn-today" onclick="goToToday()">exibir hoje</button>
+            <button id="btn-today" onclick="goToToday()">Hoje</button>
         </div>
-        <div class="header-title" id="header-summary-title" style="display: none;">Resumo</div>
+        <div class="header-title" id="header-summary-title" style="display: none;">📊 Resumo de Faltas</div>
     </header>
 
     <main id="tab-calendar" class="tab-content active">
@@ -33,17 +36,17 @@
 
     <main id="tab-summary" class="tab-content">
         <div class="summary-header">
-            <p>Faltas do Semestre (Jan - Jul 2026)</p>
+            <p>Faltas do Semestre - 6º Semestre 2026</p>
         </div>
         <div id="summary-container"></div>
     </main>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('calendar')">
+        <div class="nav-item active" onclick="switchTab('calendar')" id="nav-calendar">
             <span class="nav-icon">📅</span>
             <span>Calendário</span>
         </div>
-        <div class="nav-item" onclick="switchTab('summary')">
+        <div class="nav-item" onclick="switchTab('summary')" id="nav-summary">
             <span class="nav-icon">📊</span>
             <span>Resumo</span>
         </div>
@@ -52,9 +55,9 @@
     <div id="date-picker-overlay" onclick="toggleDatePicker()">
         <div id="date-picker" onclick="event.stopPropagation()">
             <div class="picker-month-nav">
-                <button onclick="prevMonthPicker()">&lt;</button>
+                <button onclick="prevMonthPicker()" aria-label="Mês anterior">&lt;</button>
                 <h3 id="date-picker-month-year">MÊS ANO</h3>
-                <button onclick="nextMonthPicker()">&gt;</button>
+                <button onclick="nextMonthPicker()" aria-label="Próximo mês">&gt;</button>
             </div>
             
             <div class="calendar-grid" id="date-picker-grid"></div>

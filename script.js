@@ -1,78 +1,102 @@
 /* =========================================
    LÓGICA DO APP (JavaScript)
+   6º Semestre - Calculadora de Faltas
    ========================================= */
 
 const subjectAcronyms = {
+    'go': 'GO',
     'sai': 'SAI',
-    'saude_mulher': 'S. MULHER',
-    'med_com': 'MED COM',
-    'pesq_saude': 'PESQUISA',
-    'saude_crianca': 'S. CRIANÇA',
-    'proj_ext': 'EXTENSÃO',
-    'med_legal': 'MED LEGAL'
+    'ped': 'PED',
+    'pesquisa': 'PESQUISA',
+    'projeto': 'PROJETO',
+    'med_com': 'MED E COM'
 };
 
+const subjectFullNames = {
+    'go': 'GO',
+    'sai': 'SAI',
+    'ped': 'PED',
+    'pesquisa': 'Pesquisa',
+    'projeto': 'Projeto',
+    'med_com': 'Med. e Comunidade'
+};
+
+// Horários do 6º Semestre - conforme grade
 const weeklySchedule = {
+    // Segunda-feira (1)
     1: [
-        { time: '08h30-09h30', code: 'sai' },
-        { time: '09h30-10h30', code: 'sai' },
-        { time: '10h30-11h30', code: 'saude_mulher' },
-        { time: '11h30-12h30', code: 'saude_mulher' },
-        { time: '13h30-14h30', code: 'med_com' },
-        { time: '14h30-15h30', code: 'med_com' },
-        { time: '15h30-16h30', code: 'med_com' },
-        { time: '16h30-17h30', code: 'med_com' }
+        { time: '7h30-8h20', code: 'go' },
+        { time: '8h20-9h10', code: 'go' },
+        { time: '10h-10h50', code: 'sai' },
+        { time: '10h50-11h40', code: 'sai' },
+        { time: '13h30-14h20', code: 'sai' },
+        { time: '14h20-15h10', code: 'sai' },
+        { time: '15h10-16h', code: 'sai' }
     ],
+    // Terça-feira (2)
     2: [
-        { time: '07h30-08h30', code: 'sai' },
-        { time: '08h30-09h30', code: 'sai' },
-        { time: '09h30-10h30', code: 'sai' },
-        { time: '10h30-11h30', code: 'sai' },
-        { time: '11h30-12h30', code: 'sai' },
-        { time: '12h30-13h30', code: 'sai' },
-        { time: '13h30-14h30', code: 'sai' },
-        { time: '14h30-15h30', code: 'sai' },
-        { time: '15h30-16h30', code: 'sai' },
-        { time: '16h30-17h30', code: 'sai' },
-        { time: '17h30-18h30', code: 'sai' }
+        { time: '13h30-14h20', code: 'ped' },
+        { time: '14h20-15h10', code: 'ped' },
+        { time: '15h10-16h', code: 'go' },
+        { time: '16h-16h50', code: 'go' },
+        { time: '16h50-17h40', code: 'sai' }
     ],
+    // Quarta-feira (3)
     3: [
-        { time: '07h30-08h30', code: 'pesq_saude' },
-        { time: '08h30-09h30', code: 'pesq_saude' },
-        { time: '09h30-10h30', code: 'pesq_saude' },
-        { time: '10h30-11h30', code: 'sai' },
-        { time: '11h30-12h30', code: 'sai' }
+        { time: '8h20-9h10', code: 'ped' },
+        { time: '9h10-10h', code: 'ped' }
     ],
+    // Quinta-feira (4)
     4: [
-        { time: '07h30-08h30', code: 'saude_crianca' },
-        { time: '08h30-09h30', code: 'saude_crianca' },
-        { time: '10h30-11h30', code: 'saude_mulher' },
-        { time: '11h30-12h30', code: 'saude_mulher' },
-        { time: '13h30-14h30', code: 'proj_ext' },
-        { time: '14h30-15h30', code: 'proj_ext' },
-        { time: '15h30-16h30', code: 'proj_ext' },
-        { time: '16h30-17h30', code: 'med_legal' },
-        { time: '17h30-18h30', code: 'med_legal' },
-        { time: '18h30-19h30', code: 'med_legal' }
+        { time: '7h30-8h20', code: 'sai' },
+        { time: '8h20-9h10', code: 'sai' },
+        { time: '13h30-14h20', code: 'pesquisa' },
+        { time: '14h20-15h10', code: 'pesquisa' },
+        { time: '15h10-16h', code: 'pesquisa' },
+        { time: '16h-16h50', code: 'projeto' },
+        { time: '16h50-17h40', code: 'projeto' },
+        { time: '17h40-18h30', code: 'projeto' }
     ],
+    // Sexta-feira (5)
     5: [
-        { time: '13h30-14h30', code: 'saude_crianca' },
-        { time: '14h30-15h30', code: 'saude_crianca' },
-        { time: '16h30-17h30', code: 'sai' },
-        { time: '17h30-18h30', code: 'sai' }
+        { time: '8h20-9h10', code: 'med_com' },
+        { time: '9h10-10h', code: 'med_com' },
+        { time: '10h-10h50', code: 'med_com' },
+        { time: '10h50-11h40', code: 'med_com' },
+        { time: '13h30-14h20', code: 'sai' },
+        { time: '14h20-15h10', code: 'sai' },
+        { time: '15h10-16h', code: 'sai' }
     ]
 };
 
-const calcLimit = (hours) => Math.floor(hours);
+// Aulas por semana e cálculo de limite de faltas
+// Total de semanas letivas no semestre (20 semanas padrão)
+const TOTAL_WEEKS = 20;
+const REQUIRED_ATTENDANCE = 0.75; // 75%
+
+// Aulas por semana por matéria (conforme informado)
+const classesPerWeek = {
+    'go': 4,
+    'sai': 11,
+    'ped': 4,
+    'pesquisa': 3,
+    'projeto': 3,
+    'med_com': 4
+};
+
+// Calcula o limite de faltas: 25% do total de aulas no semestre
+function calcAbsenceLimit(weeklyClasses) {
+    const totalClasses = weeklyClasses * TOTAL_WEEKS;
+    return Math.floor(totalClasses * (1 - REQUIRED_ATTENDANCE));
+}
 
 const subjectsData = {
-    'med_com': { name: 'Medicina e Comunidade', limit: calcLimit(20) },
-    'med_legal': { name: 'Medicina Legal', limit: calcLimit(15) },
-    'pesq_saude': { name: 'Pesquisa em Saúde', limit: calcLimit(15) },
-    'proj_ext': { name: 'Projeto de Extensão', limit: calcLimit(15) },
-    'saude_crianca': { name: 'Saúde da Criança e Adolescente', limit: calcLimit(20) },
-    'saude_mulher': { name: 'Saúde da Mulher', limit: calcLimit(20) },
-    'sai': { name: 'SAI', limit: calcLimit(55) }
+    'go': { name: 'GO', limit: calcAbsenceLimit(classesPerWeek['go']) },
+    'sai': { name: 'SAI', limit: calcAbsenceLimit(classesPerWeek['sai']) },
+    'ped': { name: 'PED', limit: calcAbsenceLimit(classesPerWeek['ped']) },
+    'pesquisa': { name: 'Pesquisa', limit: calcAbsenceLimit(classesPerWeek['pesquisa']) },
+    'projeto': { name: 'Projeto', limit: calcAbsenceLimit(classesPerWeek['projeto']) },
+    'med_com': { name: 'Med. e Comunidade', limit: calcAbsenceLimit(classesPerWeek['med_com']) }
 };
 
 let absences = new Set(JSON.parse(localStorage.getItem('absences_db') || '[]'));
@@ -102,11 +126,11 @@ let today = new Date();
 today.setHours(0,0,0,0);
 
 let selectedDate = new Date(today);
-if (selectedDate.getDay() === 0) selectedDate.setDate(selectedDate.getDate() + 1); 
+if (selectedDate.getDay() === 0) selectedDate.setDate(selectedDate.getDate() + 1);
 if (selectedDate.getDay() === 6) selectedDate.setDate(selectedDate.getDate() - 1);
 
 let selectedWeekMonday = getMonday(selectedDate);
-let pickerDate = new Date(selectedDate); 
+let pickerDate = new Date(selectedDate);
 
 const meses = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
 
@@ -115,7 +139,7 @@ function prevWeek() {
     if (selectedDate.getFullYear() < 2026) {
         selectedDate.setFullYear(2026);
         selectedDate.setMonth(0);
-        selectedDate.setDate(1); 
+        selectedDate.setDate(1);
     }
     selectedWeekMonday = getMonday(selectedDate);
     renderCalendarTab();
@@ -123,10 +147,10 @@ function prevWeek() {
 
 function nextWeek() {
     selectedDate.setDate(selectedDate.getDate() + 7);
-    if (selectedDate.getFullYear() > 2026 || (selectedDate.getFullYear() === 2026 && selectedDate.getMonth() > 6)) {
+    if (selectedDate.getFullYear() > 2026 || (selectedDate.getFullYear() === 2026 && selectedDate.getMonth() > 11)) {
         selectedDate.setFullYear(2026);
-        selectedDate.setMonth(6);
-        selectedDate.setDate(31); 
+        selectedDate.setMonth(11);
+        selectedDate.setDate(31);
     }
     selectedWeekMonday = getMonday(selectedDate);
     renderCalendarTab();
@@ -135,7 +159,7 @@ function nextWeek() {
 function goToToday() {
     selectedDate = new Date();
     selectedDate.setHours(0,0,0,0);
-    if (selectedDate.getDay() === 0) selectedDate.setDate(selectedDate.getDate() + 1); 
+    if (selectedDate.getDay() === 0) selectedDate.setDate(selectedDate.getDate() + 1);
     if (selectedDate.getDay() === 6) selectedDate.setDate(selectedDate.getDate() - 1);
     selectedWeekMonday = getMonday(selectedDate);
     renderCalendarTab();
@@ -147,7 +171,7 @@ function toggleDatePicker() {
     if (!isVisible) {
         overlay.style.display = 'flex';
         pickerDate = new Date(selectedDate);
-        pickerDate.setDate(1); 
+        pickerDate.setDate(1);
         renderDatePickerGrid(pickerDate);
     } else {
         overlay.style.display = 'none';
@@ -167,13 +191,13 @@ function nextMonthPicker() {
 function renderDatePickerGrid(referenceDate) {
     const grid = document.getElementById('date-picker-grid');
     grid.innerHTML = '';
-    
+
     document.getElementById('date-picker-month-year').innerText = `${meses[referenceDate.getMonth()]} ${referenceDate.getFullYear()}`;
 
     const firstDayOfMonth = new Date(referenceDate.getFullYear(), referenceDate.getMonth(), 1);
     const lastDayOfMonth = new Date(referenceDate.getFullYear(), referenceDate.getMonth() + 1, 0);
     const numDaysInMonth = lastDayOfMonth.getDate();
-    const startDay = firstDayOfMonth.getDay(); 
+    const startDay = firstDayOfMonth.getDay();
 
     const dayHeaders = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
     dayHeaders.forEach(day => {
@@ -191,21 +215,21 @@ function renderDatePickerGrid(referenceDate) {
         let currentDayLoop = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth(), i);
         let dayOfWeek = currentDayLoop.getDay();
         const dateString = getLocalDateString(currentDayLoop);
-        
+
         const dayDiv = document.createElement('div');
         dayDiv.innerText = i;
-        
+
         if (dayOfWeek === 0 || dayOfWeek === 6) {
             dayDiv.className = 'disabled-day';
         } else {
             if (dateString === getLocalDateString(today)) dayDiv.classList.add('today');
-            
+
             let hasAbsences = false;
             absences.forEach(id => {
                 if (id.startsWith(dateString)) hasAbsences = true;
             });
-            
-            if (hasAbsences) dayDiv.classList.add('missed-class'); 
+
+            if (hasAbsences) dayDiv.classList.add('missed-class');
             dayDiv.onclick = () => selectDatePickerDay(currentDayLoop);
         }
         grid.appendChild(dayDiv);
@@ -213,7 +237,7 @@ function renderDatePickerGrid(referenceDate) {
 }
 
 function selectDatePickerDay(date) {
-    if (date.getDay() === 0 || date.getDay() === 6) return; 
+    if (date.getDay() === 0 || date.getDay() === 6) return;
     selectedWeekMonday = getMonday(date);
     selectedDate = date;
     toggleDatePicker();
@@ -227,13 +251,13 @@ function renderCalendarTab() {
 
     const startDate = new Date(selectedWeekMonday);
     const endDate = new Date(selectedWeekMonday);
-    endDate.setDate(selectedWeekMonday.getDate() + 4); 
+    endDate.setDate(selectedWeekMonday.getDate() + 4);
     const startDay = startDate.getDate().toString().padStart(2, '0');
     const endDay = endDate.getDate().toString().padStart(2, '0');
     document.getElementById('week-range-text').innerText = `semana ${startDay}-${endDay}`;
 
     const minWeekMonday = getMonday(new Date(2026, 0, 1));
-    const maxWeekMonday = getMonday(new Date(2026, 6, 31));
+    const maxWeekMonday = getMonday(new Date(2026, 11, 31));
 
     document.getElementById('btn-prev-week').disabled = (selectedWeekMonday <= minWeekMonday);
     document.getElementById('btn-next-week').disabled = (selectedWeekMonday >= maxWeekMonday);
@@ -245,13 +269,13 @@ function renderCalendarTab() {
 function renderDateCarousel() {
     const carousel = document.getElementById('date-carousel');
     carousel.innerHTML = '';
-    
+
     const dayLabels = ['SEG', 'TER', 'QUA', 'QUI', 'SEX'];
 
     for (let i = 0; i < 5; i++) {
         const currentDayDate = new Date(selectedWeekMonday);
-        currentDayDate.setDate(selectedWeekMonday.getDate() + i); 
-        
+        currentDayDate.setDate(selectedWeekMonday.getDate() + i);
+
         const itemDiv = document.createElement('div');
         itemDiv.className = `date-carousel-item ${getLocalDateString(selectedDate) === getLocalDateString(currentDayDate) ? 'active' : ''}`;
         itemDiv.onclick = () => {
@@ -275,7 +299,7 @@ function renderClassesForSelectedDate() {
     const container = document.getElementById('calendar-container');
     container.innerHTML = '';
 
-    const dayNumber = selectedDate.getDay(); 
+    const dayNumber = selectedDate.getDay();
     const dateString = getLocalDateString(selectedDate);
     const dayClasses = weeklySchedule[dayNumber];
 
@@ -283,11 +307,12 @@ function renderClassesForSelectedDate() {
         dayClasses.forEach(cls => {
             const uniqueId = `${dateString}__${cls.time}__${cls.code}`;
             const isMissed = absences.has(uniqueId);
-            
+
             const shortName = subjectAcronyms[cls.code];
 
             const card = document.createElement('div');
             card.className = `class-card ${isMissed ? 'missed' : ''}`;
+            card.setAttribute('data-subject', cls.code);
             card.onclick = () => toggleAbsence(card, uniqueId);
 
             card.innerHTML = `
@@ -316,67 +341,134 @@ function toggleAbsence(cardElement, uniqueId) {
     saveAbsences();
 }
 
+function formatDateBR(dateStr) {
+    const [y, m, d] = dateStr.split('-');
+    return `${d}/${m}/${y}`;
+}
+
 function renderSummary() {
     const container = document.getElementById('summary-container');
     container.innerHTML = '';
 
     const currentAbsencesCount = {};
-    Object.keys(subjectsData).forEach(key => currentAbsencesCount[key] = 0);
-    
+    const absencesBySubject = {};
+    Object.keys(subjectsData).forEach(key => {
+        currentAbsencesCount[key] = 0;
+        absencesBySubject[key] = [];
+    });
+
     absences.forEach(id => {
         const parts = id.split('__');
         if (parts.length === 3) {
-            const subjectCode = parts[2]; 
+            const subjectCode = parts[2];
             if (currentAbsencesCount[subjectCode] !== undefined) {
                 currentAbsencesCount[subjectCode]++;
+                absencesBySubject[subjectCode].push({
+                    date: parts[0],
+                    time: parts[1]
+                });
             }
         }
     });
 
-    for (const [code, data] of Object.entries(subjectsData)) {
+    // Sort subjects: most absences first
+    const sortedSubjects = Object.entries(subjectsData).sort((a, b) => {
+        const ratioA = currentAbsencesCount[a[0]] / a[1].limit;
+        const ratioB = currentAbsencesCount[b[0]] / b[1].limit;
+        return ratioB - ratioA;
+    });
+
+    for (const [code, data] of sortedSubjects) {
         const totalMissed = currentAbsencesCount[code];
         const limit = data.limit;
         const remaining = limit - totalMissed;
-        
+        const totalClasses = classesPerWeek[code] * TOTAL_WEEKS;
+        const percentage = limit > 0 ? Math.min((totalMissed / limit) * 100, 100) : 0;
+
         let statusClass = 'status-safe';
-        if (remaining <= limit * 0.25) statusClass = 'status-danger';
-        else if (remaining <= limit * 0.5) statusClass = 'status-warning';
+        let progressClass = 'progress-safe';
+        if (remaining <= 0) {
+            statusClass = 'status-danger';
+            progressClass = 'progress-danger';
+        } else if (remaining <= limit * 0.25) {
+            statusClass = 'status-danger';
+            progressClass = 'progress-danger';
+        } else if (remaining <= limit * 0.5) {
+            statusClass = 'status-warning';
+            progressClass = 'progress-warning';
+        }
 
         const card = document.createElement('div');
         card.className = 'summary-card';
+        card.setAttribute('data-subject', code);
+
+        // Sort absence dates
+        const sortedAbsences = absencesBySubject[code].sort((a, b) => a.date.localeCompare(b.date));
+
+        let datesHTML = '';
+        if (sortedAbsences.length > 0) {
+            datesHTML = `
+                <div class="absence-dates-toggle" onclick="toggleDates(this)">
+                    <span class="arrow">▶</span> Ver datas das faltas (${sortedAbsences.length})
+                </div>
+                <div class="absence-dates-list">
+                    ${sortedAbsences.map(a => `
+                        <div class="date-item">
+                            <span>${formatDateBR(a.date)}</span>
+                            <span class="date-time">${a.time}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
         card.innerHTML = `
             <div class="summary-title">
                 <span>${data.name}</span>
-                <span class="status-badge ${statusClass}">${remaining} rest.</span>
+                <span class="status-badge ${statusClass}">${remaining >= 0 ? remaining : 0} restantes</span>
             </div>
             <div class="summary-stats">
-                <span style="color: var(--text-muted)">Limite: ${limit} faltas</span>
-                <span style="color: var(--danger-red); font-weight: 500;">Faltas Dadas: ${totalMissed}</span>
+                <span class="stat-label">Total: ${totalClasses} aulas (${classesPerWeek[code]}/sem)</span>
+                <span class="stat-label">Limite: ${limit} faltas</span>
             </div>
+            <div class="summary-stats">
+                <span class="stat-value stat-danger">Faltas dadas: ${totalMissed}</span>
+                <span class="stat-value" style="color: ${remaining > 0 ? 'var(--safe-green)' : 'var(--danger-red)'}">Pode faltar: ${Math.max(remaining, 0)}</span>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar ${progressClass}" style="width: ${percentage}%"></div>
+            </div>
+            ${datesHTML}
         `;
         container.appendChild(card);
     }
 }
 
+function toggleDates(el) {
+    el.classList.toggle('open');
+    const list = el.nextElementSibling;
+    list.classList.toggle('show');
+}
+
 function switchTab(tabName) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-    
+
     if (tabName === 'calendar') {
         document.getElementById('tab-calendar').classList.add('active');
         document.querySelectorAll('.nav-item')[0].classList.add('active');
-        
+
         document.getElementById('header-calendar-nav').style.display = 'flex';
         document.getElementById('header-summary-title').style.display = 'none';
-        
-        renderCalendarTab(); 
+
+        renderCalendarTab();
     } else {
         document.getElementById('tab-summary').classList.add('active');
         document.querySelectorAll('.nav-item')[1].classList.add('active');
-        
+
         document.getElementById('header-calendar-nav').style.display = 'none';
         document.getElementById('header-summary-title').style.display = 'flex';
-        
+
         renderSummary();
     }
 }

@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Calculadora de faltas do 6º Semestre - Controle suas presenças e veja quantas faltas ainda pode dar em cada matéria.">
-    <meta name="theme-color" content="#0f0f14">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Controle de Faltas - 6º Semestre</title>
     
     <link rel="stylesheet" href="style.css">
@@ -26,7 +26,9 @@
             </div>
             <button id="btn-today" onclick="goToToday()">Hoje</button>
         </div>
-        <div class="header-title" id="header-summary-title" style="display: none;">📊 Resumo de Faltas</div>
+        <div class="header-title" id="header-summary-title" style="display: none;">
+            <img src="grafico-histograma.png" class="header-icon" alt="Resumo"> Resumo de Faltas
+        </div>
     </header>
 
     <main id="tab-calendar" class="tab-content active">
@@ -43,11 +45,11 @@
 
     <nav class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('calendar')" id="nav-calendar">
-            <span class="nav-icon">📅</span>
+            <img src="3917244.png" class="nav-icon-img" alt="Calendário">
             <span>Calendário</span>
         </div>
         <div class="nav-item" onclick="switchTab('summary')" id="nav-summary">
-            <span class="nav-icon">📊</span>
+            <img src="grafico-histograma.png" class="nav-icon-img" alt="Resumo">
             <span>Resumo</span>
         </div>
     </nav>

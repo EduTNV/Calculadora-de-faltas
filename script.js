@@ -69,35 +69,36 @@ const weeklySchedule = {
     ]
 };
 
-// Aulas por semana e cálculo de limite de faltas
-// Total de semanas letivas no semestre (20 semanas padrão)
+// Aulas e dias por semana para cálculo de limite de faltas
 const TOTAL_WEEKS = 20;
-const REQUIRED_ATTENDANCE = 0.75; // 75%
+const REQUIRED_ATTENDANCE = 0.75; // 75% presença -> 25% faltas permitidas
 
-// Aulas por semana por matéria (conforme informado)
-const classesPerWeek = {
-    'go': 4,
-    'sai': 11,
-    'ped': 4,
-    'pesquisa': 3,
-    'projeto': 3,
-    'med_com': 4
+const classesAndDaysPerWeek = {
+    'go': { classes: 4, days: 2 },
+    'sai': { classes: 11, days: 4 },
+    'ped': { classes: 4, days: 2 },
+    'pesquisa': { classes: 3, days: 1 },
+    'projeto': { classes: 3, days: 1 },
+    'med_com': { classes: 4, days: 1 }
 };
 
-// Calcula o limite de faltas: 25% do total de aulas no semestre
-function calcAbsenceLimit(weeklyClasses) {
-    const totalClasses = weeklyClasses * TOTAL_WEEKS;
-    return Math.floor(totalClasses * (1 - REQUIRED_ATTENDANCE));
+function calcLimit(perWeek) {
+    const total = perWeek * TOTAL_WEEKS;
+    return Math.floor(total * (1 - REQUIRED_ATTENDANCE));
 }
 
-const subjectsData = {
-    'go': { name: 'GO', limit: calcAbsenceLimit(classesPerWeek['go']) },
-    'sai': { name: 'SAI', limit: calcAbsenceLimit(classesPerWeek['sai']) },
-    'ped': { name: 'PED', limit: calcAbsenceLimit(classesPerWeek['ped']) },
-    'pesquisa': { name: 'Pesquisa', limit: calcAbsenceLimit(classesPerWeek['pesquisa']) },
-    'projeto': { name: 'Projeto', limit: calcAbsenceLimit(classesPerWeek['projeto']) },
-    'med_com': { name: 'Med. e Comunidade', limit: calcAbsenceLimit(classesPerWeek['med_com']) }
-};
+const subjectsData = {};
+for (const [code, info] of Object.entries(classesAndDaysPerWeek)) {
+    subjectsData[code] = {
+        name: subjectFullNames[code],
+        classesLimit: calcLimit(info.classes),
+        daysLimit: calcLimit(info.days),
+        totalClasses: info.classes * TOTAL_WEEKS,
+        totalDays: info.days * TOTAL_WEEKS,
+        classesPerWeek: info.classes,
+        daysPerWeek: info.days
+    };
+}
 
 let absences = new Set(JSON.parse(localStorage.getItem('absences_db') || '[]'));
 
@@ -306,8 +307,12 @@ function renderClassesForSelectedDate() {
     if (dayClasses && dayClasses.length > 0) {
         dayClasses.forEach(cls => {
             const uniqueId = `${dateString}__${cls.time}__${cls.code}`;
-            const isMissed = absences.has(uniqueId);
+            
+            // Validate if class exists in current schedule (safeguard)
+            const classExists = weeklySchedule[dayNumber].some(c => c.time === cls.time && c.code === cls.code);
+            if (!classExists) return;
 
+            const isMissed = absences.has(uniqueId);
             const shortName = subjectAcronyms[cls.code];
 
             const card = document.createElement('div');
@@ -325,7 +330,7 @@ function renderClassesForSelectedDate() {
     } else {
         const card = document.createElement('div');
         card.className = 'no-class-card';
-        card.innerHTML = `😴 Sem aulas hoje!`;
+        card.innerHTML = `Sem aulas hoje!`;
         container.appendChild(card);
     }
 }
@@ -350,50 +355,86 @@ function renderSummary() {
     const container = document.getElementById('summary-container');
     container.innerHTML = '';
 
-    const currentAbsencesCount = {};
+    const currentClassesMissedCount = {};
+    const missedDaysSetBySubject = {};
     const absencesBySubject = {};
+    
     Object.keys(subjectsData).forEach(key => {
-        currentAbsencesCount[key] = 0;
+        currentClassesMissedCount[key] = 0;
+        missedDaysSetBySubject[key] = new Set();
         absencesBySubject[key] = [];
     });
+
+    const invalidAbsences = [];
 
     absences.forEach(id => {
         const parts = id.split('__');
         if (parts.length === 3) {
+            const dateStr = parts[0];
+            const timeStr = parts[1];
             const subjectCode = parts[2];
-            if (currentAbsencesCount[subjectCode] !== undefined) {
-                currentAbsencesCount[subjectCode]++;
+            
+            // Validate if the absence belongs to a valid class in the current schedule
+            const dateObj = new Date(dateStr + "T12:00:00");
+            const dayOfWeek = dateObj.getDay();
+            
+            const dayClasses = weeklySchedule[dayOfWeek];
+            const isValid = dayClasses && dayClasses.some(cls => cls.time === timeStr && cls.code === subjectCode);
+
+            if (isValid && currentClassesMissedCount[subjectCode] !== undefined) {
+                currentClassesMissedCount[subjectCode]++;
+                missedDaysSetBySubject[subjectCode].add(dateStr);
                 absencesBySubject[subjectCode].push({
-                    date: parts[0],
-                    time: parts[1]
+                    date: dateStr,
+                    time: timeStr
                 });
+            } else {
+                // If it's not valid anymore, keep track to remove it and fix local DB
+                invalidAbsences.push(id);
             }
+        } else {
+            invalidAbsences.push(id);
         }
     });
 
-    // Sort subjects: most absences first
+    // Cleanup old/invalid data from previous semesters or schedules
+    if (invalidAbsences.length > 0) {
+        invalidAbsences.forEach(id => absences.delete(id));
+        saveAbsences(); // updates localStorage without invalid data
+    }
+
+    // Sort subjects: most percentage of missed days first
     const sortedSubjects = Object.entries(subjectsData).sort((a, b) => {
-        const ratioA = currentAbsencesCount[a[0]] / a[1].limit;
-        const ratioB = currentAbsencesCount[b[0]] / b[1].limit;
+        const missedDaysA = missedDaysSetBySubject[a[0]].size;
+        const missedDaysB = missedDaysSetBySubject[b[0]].size;
+        const ratioA = missedDaysA / a[1].daysLimit;
+        const ratioB = missedDaysB / b[1].daysLimit;
         return ratioB - ratioA;
     });
 
     for (const [code, data] of sortedSubjects) {
-        const totalMissed = currentAbsencesCount[code];
-        const limit = data.limit;
-        const remaining = limit - totalMissed;
-        const totalClasses = classesPerWeek[code] * TOTAL_WEEKS;
-        const percentage = limit > 0 ? Math.min((totalMissed / limit) * 100, 100) : 0;
+        const totalClassesMissed = currentClassesMissedCount[code];
+        const totalDaysMissed = missedDaysSetBySubject[code].size;
+        
+        const classesLimit = data.classesLimit;
+        const daysLimit = data.daysLimit;
+        
+        const remainingClasses = classesLimit - totalClassesMissed;
+        const remainingDays = daysLimit - totalDaysMissed;
+        
+        const percentageClasses = classesLimit > 0 ? Math.min((totalClassesMissed / classesLimit) * 100, 100) : 0;
+        const percentageDays = daysLimit > 0 ? Math.min((totalDaysMissed / daysLimit) * 100, 100) : 0;
 
         let statusClass = 'status-safe';
         let progressClass = 'progress-safe';
-        if (remaining <= 0) {
+        
+        if (remainingDays <= 0 || remainingClasses <= 0) {
             statusClass = 'status-danger';
             progressClass = 'progress-danger';
-        } else if (remaining <= limit * 0.25) {
+        } else if (remainingDays <= daysLimit * 0.25 || remainingClasses <= classesLimit * 0.25) {
             statusClass = 'status-danger';
             progressClass = 'progress-danger';
-        } else if (remaining <= limit * 0.5) {
+        } else if (remainingDays <= daysLimit * 0.5 || remainingClasses <= classesLimit * 0.5) {
             statusClass = 'status-warning';
             progressClass = 'progress-warning';
         }
@@ -403,13 +444,16 @@ function renderSummary() {
         card.setAttribute('data-subject', code);
 
         // Sort absence dates
-        const sortedAbsences = absencesBySubject[code].sort((a, b) => a.date.localeCompare(b.date));
+        const sortedAbsences = absencesBySubject[code].sort((a, b) => {
+            if(a.date === b.date) return a.time.localeCompare(b.time);
+            return a.date.localeCompare(b.date);
+        });
 
         let datesHTML = '';
         if (sortedAbsences.length > 0) {
             datesHTML = `
                 <div class="absence-dates-toggle" onclick="toggleDates(this)">
-                    <span class="arrow">▶</span> Ver datas das faltas (${sortedAbsences.length})
+                    <span class="arrow">▶</span> Ver histórico de faltas (${totalClassesMissed} aulas em ${totalDaysMissed} dias)
                 </div>
                 <div class="absence-dates-list">
                     ${sortedAbsences.map(a => `
@@ -425,19 +469,36 @@ function renderSummary() {
         card.innerHTML = `
             <div class="summary-title">
                 <span>${data.name}</span>
-                <span class="status-badge ${statusClass}">${remaining >= 0 ? remaining : 0} restantes</span>
+                <span class="status-badge ${statusClass}">${remainingDays >= 0 ? remainingDays : 0} dias restantes</span>
+            </div>
+            
+            <div class="summary-section-title">Controle de Dias</div>
+            <div class="summary-stats">
+                <span class="stat-label">Total: ${data.totalDays} dias (${data.daysPerWeek}/sem)</span>
+                <span class="stat-label">Limite: ${daysLimit} dias</span>
             </div>
             <div class="summary-stats">
-                <span class="stat-label">Total: ${totalClasses} aulas (${classesPerWeek[code]}/sem)</span>
-                <span class="stat-label">Limite: ${limit} faltas</span>
-            </div>
-            <div class="summary-stats">
-                <span class="stat-value stat-danger">Faltas dadas: ${totalMissed}</span>
-                <span class="stat-value" style="color: ${remaining > 0 ? 'var(--safe-green)' : 'var(--danger-red)'}">Pode faltar: ${Math.max(remaining, 0)}</span>
+                <span class="stat-value stat-danger">Dias faltados: ${totalDaysMissed}</span>
+                <span class="stat-value" style="color: ${remainingDays > 0 ? 'var(--safe-green)' : 'var(--danger-red)'}">Pode faltar: ${Math.max(remainingDays, 0)} dias</span>
             </div>
             <div class="progress-container">
-                <div class="progress-bar ${progressClass}" style="width: ${percentage}%"></div>
+                <div class="progress-bar ${progressClass}" style="width: ${percentageDays}%"></div>
             </div>
+            
+            <div class="summary-section-title" style="margin-top: 16px;">Controle de Aulas (Horários)</div>
+            <div class="summary-stats">
+                <span class="stat-label">Total: ${data.totalClasses} aulas</span>
+                <span class="stat-label">Limite: ${classesLimit} aulas</span>
+            </div>
+            <div class="summary-stats">
+                <span class="stat-value stat-danger">Aulas faltadas: ${totalClassesMissed}</span>
+                <span class="stat-value" style="color: ${remainingClasses > 0 ? 'var(--safe-green)' : 'var(--danger-red)'}">Pode faltar: ${Math.max(remainingClasses, 0)} aulas</span>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar ${progressClass}" style="width: ${percentageClasses}%"></div>
+            </div>
+            
+            <div style="margin-top: 12px;"></div>
             ${datesHTML}
         `;
         container.appendChild(card);
